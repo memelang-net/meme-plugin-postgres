@@ -1,6 +1,7 @@
 from typing import List, Tuple, Union
 from funcparserlib.lexer import make_tokenizer, TokenSpec, Token
-from funcparserlib.parser import tok, Parser, many, forward_decl, finished
+from funcparserlib.parser import tok, Parser, many, forward_decl, finished, maybe
+from funcparserlib.util import pretty_tree
 from dataclasses import dataclass
 
 def tokenize(s: str) -> List[Token]:
@@ -29,10 +30,25 @@ class InverseRelation:
 class Idea:
     name: str
 
+@dataclass
+class Target:
+    name: str
+
+@dataclass
+class Apply:
+    left: any
+    right: any
+
 QueryExpr = Union[Relation,Idea,InverseRelation]
 
 def parse(tokens: List[Token]) -> QueryExpr:
-    idea = tok('idea') >> (lambda a: Idea(a[0]))
-    relation = tok('relation') >> (lambda a: Relation(a[0][1:]))
-    document = (idea | relation) + -finished
+    idea = tok('idea') >> (lambda a: Idea(a))
+    relation = tok('relation') >> (lambda a: Relation(a[1:]))
+    target = tok('target') >> (lambda a: Target(a[1:]))
+    inverse_relation = tok('inverse_relation') >> (lambda a: InverseRelation(a[1:]))
+    chain = forward_decl()
+    def chains(args):
+        return Apply(left=args[0], right=args[1])
+    chain.define((idea | relation | inverse_relation | target) + maybe(chain) >> chains)
+    document = chain + -finished
     return document.parse(tokens)
