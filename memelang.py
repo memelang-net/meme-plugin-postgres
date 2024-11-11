@@ -35,7 +35,7 @@ class RelationalExpr:
 @dataclass
 class MathExpr:
      op: str
-     val: float
+     val: str
      
 @dataclass
 class RelationalMathExpr:
@@ -72,7 +72,7 @@ def parse(tokens: List[Token]) -> QueryExpr:
         relation >> (lambda r: RelationalExpr(idea=None, relation=r,  target=None)) | \
         target >> (lambda t: RelationalExpr(idea=None, relation=None, target=t))
     mathOp = tok('addqty') | tok('minusqty') | tok('timesqty') | tok('divideqty') | tok('modqty') | tok('expqty')    
-    mathExpr = mathOp + tok('float') >> (lambda args: MathExpr(*args))
+    mathExpr = mathOp + tok('float') >> (lambda args: MathExpr(op=args[0], val=args[1]))
     relationalMathExpr = relationalExpr + mathExpr >> (lambda args: RelationalMathExpr(relExpr=args[0], mathExpr=args[1]))
     term = relationalMathExpr | relationalExpr 
     disjunctionExpr = term + tok('or') + expr >> (lambda args: DisjunctionExpr(left=args[0], right=args[2]))
