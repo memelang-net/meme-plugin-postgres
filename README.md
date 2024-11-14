@@ -6,7 +6,9 @@ Implements [memelang](https://memelang.net/) as a function within postgresql.
 
 Ensure that pl/plython is installed in your postgresql installation.
 
-On Debian/Ubuntu: `sudo apt install postgresql-plpython3-16`
+On Ubuntu 20.04: `sudo apt install postgresql-plpython3-12`
+
+On Ubuntu 24.04: `sudo apt install postgresql-plpython3-16`
 
 Run SQL installation script:
 
