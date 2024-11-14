@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional
 from funcparserlib.lexer import make_tokenizer, TokenSpec, Token
 from funcparserlib.parser import tok, Parser, many, forward_decl, finished, maybe
 from funcparserlib.util import pretty_tree
@@ -28,9 +28,9 @@ def tokenize(s: str) -> List[Token]:
 
 @dataclass
 class RelationalExpr:
-    idea: str | None
-    relation: str | None
-    target: str | None
+    idea: Optional[str]
+    relation: Optional[str]
+    target: Optional[None]
 
 @dataclass
 class MathExpr:
