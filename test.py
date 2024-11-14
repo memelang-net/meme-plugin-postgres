@@ -11,7 +11,8 @@ def test_basic_exprs():
              (':B', 'SELECT * FROM meme.meme WHERE bid=$1', ['B']),
              ('A.Rx | A.Ry', 'SELECT * FROM meme.meme WHERE aid=$1 AND rid=$2 UNION SELECT * FROM meme.meme WHERE aid=$3 AND rid=$4', ['A', 'Rx', 'A', 'Ry']),
              ('A.Rx & A.Ry', 'SELECT * FROM meme.meme WHERE EXISTS (SELECT * FROM meme.meme WHERE aid=$1 AND rid=$2) AND EXISTS (SELECT * FROM meme.meme WHERE aid=$3 AND rid=$4)', ['A', 'Rx', 'A', 'Ry']),
-             ('A.R:B += 10', 'SELECT aid,rid,bid,qnt + 10 AS qnt FROM meme.meme WHERE aid=$1 AND rid=$2 AND bid=$3', ['A', 'R', 'B'])
+             ('A.R:B += 10', 'SELECT aid,rid,bid,qnt + 10 AS qnt FROM meme.meme WHERE aid=$1 AND rid=$2 AND bid=$3', ['A', 'R', 'B']),
+             ('A.R:B %= 1', 'SELECT aid,rid,bid,qnt % 1 AS qnt FROM meme.meme WHERE aid=$1 AND rid=$2 AND bid=$3', ['A', 'R', 'B'])
              ]
     for (memelang_expr, expected_sql, expected_params) in exprs:
         (sql, params) = ml.compile_sql(ml.parse(ml.tokenize(memelang_expr)))
