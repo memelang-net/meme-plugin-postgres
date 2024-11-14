@@ -125,25 +125,24 @@ def compile_sql(q: QueryExpr, argc: int=1) -> Tuple[str,List[str]]:
     return (sql, arg_stack)
 
 def compile_math_sql(expr: MathExpr) -> str:
-     match expr.op:
-          case '+=':
-               return f'qnt + {expr.val}'
-          case '-=':
-               return f'qnt - {expr.val}'
-          case '*=':
-               return f'qnt * {expr.val}'
-          case '/=':
-               return f'qnt / {expr.val}'
-          case '%=':
-               return f'qnt % {expr.val}'
-          case '^=':
-               return f'qnt ^ {expr.val}'
-          case _:
-               raise ValueError(f'invalid operator: {expr.op}')
+     if expr.op == '+=':
+          return f'qnt + {expr.val}'
+     elif expr.op == '-=':
+          return f'qnt - {expr.val}'
+     elif expr.op == '*=':
+          return f'qnt * {expr.val}'
+     elif expr.op == '/=':
+          return f'qnt / {expr.val}'
+     elif expr.op == '%=':
+          return f'qnt % {expr.val}'
+     elif expr.op == '^=':
+          return f'qnt ^ {expr.val}'
+     else:
+          raise ValueError(f'invalid operator: {expr.op}')
     
 def execute_memelang():
      (sql, params) = compile_sql(parse(tokenize(memelang_in)))
-     #plpy.info(sql)
+     plpy.info(sql)
      plan = plpy.prepare(sql, ['text'] * len(params))
      result = plpy.execute(plan, params)
      #for r in result:

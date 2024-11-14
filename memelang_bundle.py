@@ -82,7 +82,7 @@ with __stickytape_temporary_dir() as __stickytape_working_dir:
     @dataclass
     class MathExpr:
          op: str
-         val: float
+         val: str
          
     @dataclass
     class RelationalMathExpr:
@@ -119,7 +119,7 @@ with __stickytape_temporary_dir() as __stickytape_working_dir:
             relation >> (lambda r: RelationalExpr(idea=None, relation=r,  target=None)) | \
             target >> (lambda t: RelationalExpr(idea=None, relation=None, target=t))
         mathOp = tok('addqty') | tok('minusqty') | tok('timesqty') | tok('divideqty') | tok('modqty') | tok('expqty')    
-        mathExpr = mathOp + tok('float') >> (lambda args: MathExpr(*args))
+        mathExpr = mathOp + tok('float') >> (lambda args: MathExpr(op=args[0], val=args[1]))
         relationalMathExpr = relationalExpr + mathExpr >> (lambda args: RelationalMathExpr(relExpr=args[0], mathExpr=args[1]))
         term = relationalMathExpr | relationalExpr 
         disjunctionExpr = term + tok('or') + expr >> (lambda args: DisjunctionExpr(left=args[0], right=args[2]))
@@ -172,29 +172,28 @@ with __stickytape_temporary_dir() as __stickytape_working_dir:
         return (sql, arg_stack)
     
     def compile_math_sql(expr: MathExpr) -> str:
-         match expr.op:
-              case '+=':
-                   return f'qnt + {expr.val}'
-              case '-=':
-                   return f'qnt - {expr.val}'
-              case '*=':
-                   return f'qnt * {expr.val}'
-              case '/=':
-                   return f'qnt / {expr.val}'
-              case '%=':
-                   return f'qnt % {expr.val}'
-              case '^=':
-                   return f'qnt ^ {expr.val}'
-              case _:
-                   raise ValueError(f'invalid operator: {expr.op}')
+         if expr.op == '+=':
+              return f'qnt + {expr.val}'
+         elif expr.op == '-=':
+              return f'qnt - {expr.val}'
+         elif expr.op == '*=':
+              return f'qnt * {expr.val}'
+         elif expr.op == '/=':
+              return f'qnt / {expr.val}'
+         elif expr.op == '%=':
+              return f'qnt % {expr.val}'
+         elif expr.op == '^=':
+              return f'qnt ^ {expr.val}'
+         else:
+              raise ValueError(f'invalid operator: {expr.op}')
         
     def execute_memelang():
          (sql, params) = compile_sql(parse(tokenize(memelang_in)))
          plpy.info(sql)
          plan = plpy.prepare(sql, ['text'] * len(params))
          result = plpy.execute(plan, params)
-         for r in result:
-              plpy.info(r)
+         #for r in result:
+         #     plpy.info(r)
          return [r for r in result]
     
     
