@@ -36,4 +36,15 @@ SELECT * FROM meme.query('A.R:B');
 
 ## Testing
 
-`pytest test.py`
+```
+#install python venv
+sudo apt install python3.12-venv
+python3 -mvenv venv
+#activate venv
+source venv/bin/activate
+#install dependencies
+pip install -r requirements.txt
+pip install pytest
+#run the tests
+python -m pytest test.py
+```
