@@ -17,8 +17,8 @@ with open(bundle_path, 'r') as pyin:
 sql = f'''CREATE EXTENSION IF NOT EXISTS plpython3u;
 DROP SCHEMA IF EXISTS meme CASCADE;
 CREATE SCHEMA meme;
-CREATE TABLE meme.meme (aid varchar(255), rid varchar(255), bid varchar(255), qnt DECIMAL(20,6));
-CREATE FUNCTION meme.query(memelang_in TEXT) RETURNS TABLE (LIKE meme.meme) AS $$ {memelang_body}
+CREATE TABLE IF NOT EXISTS meme (aid varchar(255), rid varchar(255), bid varchar(255), qnt DECIMAL(20,6));
+CREATE FUNCTION meme.query(memelang_in TEXT) RETURNS TABLE (LIKE meme) AS $$ {memelang_body}
 return execute_memelang()
 $$ LANGUAGE plpython3u;'''
 

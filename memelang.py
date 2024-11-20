@@ -89,7 +89,7 @@ def intersperse(value, seq):
 
 def compile_sql(q: QueryExpr, argc: int=1) -> Tuple[str,List[str]]:
     arg_stack = []
-    sql = 'SELECT * FROM meme.meme WHERE '
+    sql = 'SELECT * FROM meme WHERE '
     filters = []
     if isinstance(q, RelationalExpr):
         if q.idea is not None:
