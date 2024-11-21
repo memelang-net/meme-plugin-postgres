@@ -18,3 +18,6 @@ sudo -u postgres psql -d meme -c "CREATE EXTENSION plpython3u;"
 
 # Run the setup SQL script
 sudo -u postgres psql -d meme -f memelang_plpythonu_setup.sql
+
+# Insert default data
+sudo -u postgres psql -d meme -f data.sql
