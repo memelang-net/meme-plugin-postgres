@@ -1,4 +1,4 @@
-# memelang for postgres
+# [memelang](https://memelang.net) for postgres
 
 Implements [memelang](https://memelang.net/) as a function within postgresql.
 
@@ -29,7 +29,16 @@ Populate the meme.meme table with some values:
 Run your memelang query:
 
 ```SQL
-SELECT * FROM meme.query('A.R:B');
+meme=# select * from meme.query('william_taft.occupation');
+INFO:  SELECT * FROM meme WHERE aid=$1 AND rid=$2
+     aid      |    rid     |                 bid                 |   qnt    
+--------------+------------+-------------------------------------+----------
+ william_taft | occupation | lawyer                              | 1.000000
+ william_taft | occupation | solicitor_general                   | 1.000000
+ william_taft | occupation | judge                               | 1.000000
+ william_taft | occupation | governor_general_of_the_philippines | 1.000000
+ william_taft | occupation | secretary_of_war                    | 1.000000
+(5 rows)
 ```
 
 ## Build
