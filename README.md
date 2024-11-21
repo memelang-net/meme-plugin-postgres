@@ -14,8 +14,6 @@ Ensure that pl/plython is installed in your postgresql installation.
 
 On Ubuntu 20.04: `sudo apt install postgresql-plpython3-12`
 
-On Ubuntu 24.04: `sudo apt install postgresql-plpython3-16`
-
 Run SQL installation script:
 
 `psql -f memelang_plpythonu_setup.sql <target db>`
