@@ -8,7 +8,31 @@ License: [Memelicense.net](https://Memelicense.net)
 
 ### For Ubuntu 24.04:
 
-`bash memelang_install.sh`
+```bash
+#!/bin/bash
+set -ex
+
+# Update and install dependencies
+sudo apt update
+sudo apt install -y python3 python3-pip pythonpy python3-pytest postgresql postgresql-plpython3-16 git git-core
+
+# Start PostgreSQL service
+sudo systemctl start postgresql
+
+# Clone the repository
+git clone https://gitlab.com/CodeDarkin/memelang.git
+cd memelang
+
+# Set up PostgreSQL with embedded commands
+sudo -u postgres psql -c "CREATE DATABASE meme;"
+sudo -u postgres psql -d meme -c "CREATE EXTENSION plpython3u;"
+
+# Run the setup SQL script
+sudo -u postgres psql -d meme -f memelang_plpythonu_setup.sql
+
+# Insert default data
+sudo -u postgres psql -d meme -f data.sql
+```
 
 ### For other platforms:
 
@@ -18,14 +42,14 @@ On Ubuntu 20.04: `sudo apt install postgresql-plpython3-12`
 
 Run SQL installation script:
 
-`psql -f memelang_plpythonu_setup.sql <target db>`
+`psql -f memelang_plpythonu_setup.sql meme`
 
 ## Usage:
 
 Populate the meme.meme table with some values:
 
 ```SQL
-=# insert into meme(aid,rid,bid,qnt) values ('A','R','B',1),('Alice','uncle','Bob',1);
+=# INSERT INTO meme (aid, rid, bid, qnt) VALUES ('george_washington', 'education', 'grade_school', 1);
 ```
 
 Run your memelang query:
