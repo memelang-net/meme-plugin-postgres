@@ -2,6 +2,8 @@
 
 Implements [memelang](https://memelang.net/) as a function within postgresql.
 
+License: [Memelicense.net](https://Memelicense.net)
+
 ## Installation
 
 ### For Ubuntu 24.04:
